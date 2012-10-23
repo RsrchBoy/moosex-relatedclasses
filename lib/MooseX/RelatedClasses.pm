@@ -59,6 +59,7 @@ sub _generate_one_attribute_set {
     my $full_name = $p->namespace . '::' . $name;
 
     my $local_name           = decamelize($name) . '_class';
+    $local_name              =~ s/::/__/g; # SomeThing::More -> some_thing__more
     my $original_local_name  = "original_$local_name";
     my $traitsfor_local_name = $local_name . '_traits';
 
