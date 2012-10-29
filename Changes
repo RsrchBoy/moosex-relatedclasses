@@ -1,3 +1,8 @@
 Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
+
+0.001     2012-10-29 11:28:54 PST8PDT
+	* initial release
+	* basic parameterized role is in place; this should remain stable even as
+	  we enhance. (That's the plan, at any rate)

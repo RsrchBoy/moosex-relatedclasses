@@ -10,17 +10,21 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 =head1 VERSION
 
-This document describes version 0.000_01 of MooseX::RelatedClasses - released October 21, 2012 as part of MooseX-RelatedClasses.
+This document describes version 0.001 of MooseX::RelatedClasses - released October 29, 2012 as part of MooseX-RelatedClasses.
 
 =head1 DESCRIPTION
 
 Have you ever built out a framework, or interface API of some sort, to
 discover either that you were hardcoding your related class names (not very
 extension-friendly) or writing the same code for the same type of attributes
-to specifiy what related classes you're using?
+to specify what related classes you're using?
 
 Alternatively, have you ever been using a framework, and wanted to tweak one
-tiny bit of behaviour in a subclass
+tiny bit of behaviour in a subclass, only to realize it was written in such a
+way to make that difficult-to-impossible without a significant effort?
+
+This package aims to end that, by providing an easy, flexible way of defining
+"related classes", their base class, and allowing traits to be specified.
 
 =head1 SYNOPSIS
     package My::Framework::Thinger;
@@ -86,11 +90,15 @@ So too, here, we do this, but in a more flexible way: we track the original
 related class, any additional traits that should be applied, and the new
 (anonymous, typically) class name of the related class.
 
+Another example is the (very useful and usable) L<Net::Amazon::EC2>.  It uses
+L<Moose>, is nicely broken out into discrete classes, etc, but does not lend
+itself to easy on-the-fly extension by developers with traits.
+
 =head1 VERY EARLY CODE
 
 This package is very new, and is still being vetted "in use", as it were.  The
 documentation (or tests) may not be 100%, but it's in active use.  Pull
-requests are happily recieved :)
+requests are happily received :)
 
 =head1 DOCUMENTATION
 
@@ -100,8 +108,17 @@ I _did_ warn you this is a very early release, right?
 
 =head1 SOURCE
 
-The development version is on github at L<http://github.com/RsrchBoy/MooseX-RelatedClasses>
-and may be cloned from L<git://github.com/RsrchBoy/MooseX-RelatedClasses.git>
+The development version is on github at L<http://github.com/RsrchBoy/moosex-relatedclasses>
+and may be cloned from L<git://github.com/RsrchBoy/moosex-relatedclasses.git>
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+https://github.com/RsrchBoy/moosex-relatedclasses/issues
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 
