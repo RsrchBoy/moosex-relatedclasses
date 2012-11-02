@@ -41,7 +41,7 @@ parameter all_in_namespace => (
 parameter namespace => (
     traits    => [Shortcuts],
     is        => 'rwp',
-    isa       => PackageName,
+    isa       => Maybe[PackageName],
     predicate => 1,
 );
 
@@ -61,7 +61,10 @@ role {
 
     if ($p->all_in_namespace) {
 
-        my $ns = $p->namespace;
+        my $ns = $p->namespace || q{};
+
+        confess 'Cannot use an empty namespace and all_in_namespace!'
+            unless $ns;
 
         ### finding for namespace: $ns
         my @mod =
@@ -81,7 +84,11 @@ sub _generate_one_attribute_set {
     my ($p, $name, %opts) = @_;
 
     #my $name = $p->namespace . '::' . $p->name;
-    my $full_name = $p->namespace . '::' . $name;
+    my $full_name
+        = $p->namespace
+        ? $p->namespace . '::' . $name
+        : $name
+        ;
 
     my $local_name           = decamelize($name) . '_class';
     $local_name              =~ s/::/__/g; # SomeThing::More -> some_thing__more
