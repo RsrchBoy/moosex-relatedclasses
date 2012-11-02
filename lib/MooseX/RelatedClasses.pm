@@ -230,4 +230,18 @@ See the SYNOPSIS for information; the tests are also useful here as well.
 
 I _did_ warn you this is a very early release, right?
 
+=head1 ANONYMOUS CLASS NAMES
+
+Note that we use L<MooseX::Traitor> to compose anonymous classes, so the
+"anonymouse names" will look less like:
+
+    Moose::Meta::Package::__ANON__::SERIAL::...
+
+And more like:
+
+    My::Framework::Thinger::__ANON__::SERIAL::...
+
+Anonymous classes are only ever composed if traits for a related class are
+supplied.
+
 =cut
