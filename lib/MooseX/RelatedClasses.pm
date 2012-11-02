@@ -13,16 +13,29 @@ use MooseX::Types::Moose ':all';
 use Moose::Autobox;
 use MooseX::Util 'with_traits';
 
+use Module::Find 'findallmod';
+
 use String::CamelCase 'decamelize';
 use String::RewritePrefix;
 
-parameter name  => (is => 'ro',  isa => NonEmptySimpleStr);
+parameter name  => (
+    traits    => [Shortcuts],
+    is        => 'ro',
+    isa       => NonEmptySimpleStr,
+    predicate => 1,
+);
 
 parameter names => (
-    traits  => [Shortcuts],
-    is      => 'lazy',
-    isa     => ArrayRef[NonEmptySimpleStr],
-    default => sub { [ shift->name ] },
+    traits    => [Shortcuts],
+    is        => 'lazy',
+    isa       => ArrayRef[NonEmptySimpleStr],
+    predicate => 1,
+    default   => sub { [ ( $_[0]->has_name ? $_[0]->name : ()) ] },
+);
+
+parameter all_in_namespace => (
+    isa     => 'Bool',
+    default => 0,
 );
 
 parameter namespace => (
@@ -44,6 +57,18 @@ role {
             unless $opts{consumer};
 
         $p->_set_namespace($opts{consumer}->name);
+    }
+
+    if ($p->all_in_namespace) {
+
+        my $ns = $p->namespace;
+
+        ### finding for namespace: $ns
+        my @mod =
+            map { s/^${ns}:://; $_ }
+            Module::Find::findallmod $ns
+            ;
+        $p->names->push(@mod);
     }
 
     _generate_one_attribute_set($p, $_, %opts)
@@ -80,16 +105,13 @@ sub _generate_one_attribute_set {
 
     # XXX do the same original/local init_arg swizzle here too?
     has $traitsfor_local_name => (
-        traits => [Shortcuts, 'Array'],
-        is     => 'lazy',
-        isa    => ArrayRef[PackageName],
+        traits  => [Shortcuts, 'Array'],
+        is      => 'lazy',
+        isa     => ArrayRef[PackageName],
         handles => {
             "has_$traitsfor_local_name" => 'count',
         },
     );
-
-    # TODO for _build_local_name we should really use different methods
-    # depending on what's required: using with_traits or MX::Traits natively.
 
     method "_build_original_$local_name" => sub { $full_name };
     method "_build_$local_name" => sub {
