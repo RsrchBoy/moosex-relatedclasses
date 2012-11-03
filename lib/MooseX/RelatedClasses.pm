@@ -4,13 +4,13 @@ package MooseX::RelatedClasses;
 
 use MooseX::Role::Parameterized;
 use namespace::autoclean;
+use autobox::Core;
 use MooseX::AttributeShortcuts 0.015;
 use MooseX::Traits;
 use MooseX::Types::Common::String ':all';
 use MooseX::Types::LoadableClass ':all';
 use MooseX::Types::Perl ':all';
 use MooseX::Types::Moose ':all';
-use Moose::Autobox;
 use MooseX::Util 'with_traits';
 
 use Module::Find 'findallmod';
