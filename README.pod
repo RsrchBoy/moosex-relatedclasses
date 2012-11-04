@@ -10,26 +10,15 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 =head1 VERSION
 
-This document describes version 0.001 of MooseX::RelatedClasses - released October 29, 2012 as part of MooseX-RelatedClasses.
-
-=head1 DESCRIPTION
-
-Have you ever built out a framework, or interface API of some sort, to
-discover either that you were hardcoding your related class names (not very
-extension-friendly) or writing the same code for the same type of attributes
-to specify what related classes you're using?
-
-Alternatively, have you ever been using a framework, and wanted to tweak one
-tiny bit of behaviour in a subclass, only to realize it was written in such a
-way to make that difficult-to-impossible without a significant effort?
-
-This package aims to end that, by providing an easy, flexible way of defining
-"related classes", their base class, and allowing traits to be specified.
+This document describes version 0.002 of MooseX::RelatedClasses - released November 03, 2012 as part of MooseX-RelatedClasses.
 
 =head1 SYNOPSIS
+
+    # a related class...
     package My::Framework::Thinger;
     # ...
 
+    # our "parent" class...
     package My::Framework;
 
     use Moose;
@@ -72,11 +61,89 @@ This package aims to end that, by providing an easy, flexible way of defining
     # if you're using this role and the name of the class is _not_ your
     # related namespace, then you can specify it:
     with 'MooseX::RelatedClasses' => {
-
         # e.g. My::Framework::Recorder::Thinger
         name      => 'Thinger',
         namespace => 'My::Framework::Recorder',
     };
+
+    # if you want to specify another class w/o any common namespace as
+    # related:
+    with 'MooseX::RelatedClasses' => {
+        namespace => undef,
+        name      => 'LWP::UserAgent',
+    };
+
+=head1 DESCRIPTION
+
+Have you ever built out a framework, or interface API of some sort, to
+discover either that you were hardcoding your related class names (not very
+extension-friendly) or writing the same code for the same type of attributes
+to specify what related classes you're using?
+
+Alternatively, have you ever been using a framework, and wanted to tweak one
+tiny bit of behaviour in a subclass, only to realize it was written in such a
+way to make that difficult-to-impossible without a significant effort?
+
+This package aims to end that, by providing an easy, flexible way of defining
+"related classes", their base class, and allowing traits to be specified.
+
+=head2 This is early code!
+
+This package is very new, and is still being vetted "in use", as it were.  The
+documentation (or tests) may not be 100%, but it's in active use.  Pull
+requests are happily received :)
+
+=head2 Documentation
+
+See the SYNOPSIS for information; the tests are also useful here as well.
+
+I _did_ warn you this is a very early release, right?
+
+=head1 ROLE PARAMETERS
+
+Parameterized roles accept parameters that influence their construction.  This role accepts the following parameters.
+
+=head2 name
+
+The name of a class, without the prefix, to consider related.  e.g. if My::Foo
+is our namespace and My::Foo::Bar is the related class:
+
+    name => 'Bar'
+
+...is the correct specification.
+
+This parameter is optional, so long as either the names or all_in_namespace
+parameters are given.
+
+=head2 names [ ... ]
+
+One or more names that would be legal for the name parameter.
+
+=head2 all_in_namespace (0|1)
+
+True if all findable packages under the namespace should be used as related
+classes.  Defaults to false.
+
+=head2 namespace
+
+The namespace our related classes live in.  If this is not given explicitly,
+the name of the consuming class will be used as the namespace.  If the
+consuming class is not available (e.g. it's being constructed by something
+other than a consumer), then this parameter is mandatory.
+
+This parameter will also accept an explicit 'undef'.  If this is the case,
+then related classes must be specified by their full name and it is an error
+to attempt to enable the all_in_namespace option.
+
+e.g.:
+
+    with 'MooseX::RelatedClasses' => {
+        namespace => undef,
+        name      => 'LWP::UserAgent',
+    };
+
+...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
+C<original_lwp__user_agent_class> attributes.
 
 =head1 INSPIRATION / MADNESS
 
@@ -94,17 +161,19 @@ Another example is the (very useful and usable) L<Net::Amazon::EC2>.  It uses
 L<Moose>, is nicely broken out into discrete classes, etc, but does not lend
 itself to easy on-the-fly extension by developers with traits.
 
-=head1 VERY EARLY CODE
+=head1 ANONYMOUS CLASS NAMES
 
-This package is very new, and is still being vetted "in use", as it were.  The
-documentation (or tests) may not be 100%, but it's in active use.  Pull
-requests are happily received :)
+Note that we use L<MooseX::Traitor> to compose anonymous classes, so the
+"anonymous names" will look less like:
 
-=head1 DOCUMENTATION
+    Moose::Meta::Package::__ANON__::SERIAL::...
 
-See the SYNOPSIS for information; the tests are also useful here as well.
+And more like:
 
-I _did_ warn you this is a very early release, right?
+    My::Framework::Thinger::__ANON__::SERIAL::...
+
+Anonymous classes are only ever composed if traits for a related class are
+supplied.
 
 =head1 SOURCE
 
