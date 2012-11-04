@@ -18,6 +18,50 @@ use Module::Find 'findallmod';
 use String::CamelCase 'decamelize';
 use String::RewritePrefix;
 
+=roleparam name
+
+The name of a class, without the prefix, to consider related.  e.g. if My::Foo
+is our namespace and My::Foo::Bar is the related class:
+
+    name => 'Bar'
+
+...is the correct specification.
+
+This parameter is optional, so long as either the names or all_in_namespace
+parameters are given.
+
+=roleparam names [ ... ]
+
+One or more names that would be legal for the name parameter.
+
+=roleparam all_in_namespace (0|1)
+
+True if all findable packages under the namespace should be used as related
+classes.  Defaults to false.
+
+=roleparam namespace
+
+The namespace our related classes live in.  If this is not given explicitly,
+the name of the consuming class will be used as the namespace.  If the
+consuming class is not available (e.g. it's being constructed by something
+other than a consumer), then this parameter is mandatory.
+
+This parameter will also accept an explicit 'undef'.  If this is the case,
+then related classes must be specified by their full name and it is an error
+to attempt to enable the all_in_namespace option.
+
+e.g.:
+
+    with 'MooseX::RelatedClasses' => {
+        namespace => undef,
+        name      => 'LWP::UserAgent',
+    };
+
+...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
+C<original_lwp__user_agent_class> attributes.
+
+=cut
+
 parameter name  => (
     traits    => [Shortcuts],
     is        => 'ro',
@@ -136,9 +180,12 @@ sub _generate_one_attribute_set {
 __END__
 
 =head1 SYNOPSIS
+
+    # a related class...
     package My::Framework::Thinger;
     # ...
 
+    # our "parent" class...
     package My::Framework;
 
     use Moose;
@@ -181,12 +228,17 @@ __END__
     # if you're using this role and the name of the class is _not_ your
     # related namespace, then you can specify it:
     with 'MooseX::RelatedClasses' => {
-
         # e.g. My::Framework::Recorder::Thinger
         name      => 'Thinger',
         namespace => 'My::Framework::Recorder',
     };
 
+    # if you want to specify another class w/o any common namespace as
+    # related:
+    with 'MooseX::RelatedClasses' => {
+        namespace => undef,
+        name      => 'LWP::UserAgent',
+    };
 
 =head1 DESCRIPTION
 
@@ -201,6 +253,18 @@ way to make that difficult-to-impossible without a significant effort?
 
 This package aims to end that, by providing an easy, flexible way of defining
 "related classes", their base class, and allowing traits to be specified.
+
+=head2 This is early code!
+
+This package is very new, and is still being vetted "in use", as it were.  The
+documentation (or tests) may not be 100%, but it's in active use.  Pull
+requests are happily received :)
+
+=head2 Documentation
+
+See the SYNOPSIS for information; the tests are also useful here as well.
+
+I _did_ warn you this is a very early release, right?
 
 =head1 INSPIRATION / MADNESS
 
@@ -218,22 +282,10 @@ Another example is the (very useful and usable) L<Net::Amazon::EC2>.  It uses
 L<Moose>, is nicely broken out into discrete classes, etc, but does not lend
 itself to easy on-the-fly extension by developers with traits.
 
-=head1 VERY EARLY CODE
-
-This package is very new, and is still being vetted "in use", as it were.  The
-documentation (or tests) may not be 100%, but it's in active use.  Pull
-requests are happily received :)
-
-=head1 DOCUMENTATION
-
-See the SYNOPSIS for information; the tests are also useful here as well.
-
-I _did_ warn you this is a very early release, right?
-
 =head1 ANONYMOUS CLASS NAMES
 
 Note that we use L<MooseX::Traitor> to compose anonymous classes, so the
-"anonymouse names" will look less like:
+"anonymous names" will look less like:
 
     Moose::Meta::Package::__ANON__::SERIAL::...
 
