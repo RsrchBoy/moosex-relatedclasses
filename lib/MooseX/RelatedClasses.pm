@@ -150,7 +150,7 @@ sub _generate_one_attribute_set {
     has $local_name => (
         traits   => [Shortcuts],
         is       => 'lazy',
-        isa      => PackageName,
+        isa      => LoadableClass,
         init_arg => undef,
     );
 
@@ -158,7 +158,7 @@ sub _generate_one_attribute_set {
     has $traitsfor_local_name => (
         traits  => [Shortcuts, 'Array'],
         is      => 'lazy',
-        isa     => ArrayRef[PackageName],
+        isa     => ArrayRef[LoadableRole],
         handles => {
             "has_$traitsfor_local_name" => 'count',
         },
