@@ -15,6 +15,7 @@ use MooseX::Util 'with_traits';
 
 use Module::Find 'findallmod';
 
+use Class::Load 'load_class';
 use String::CamelCase 'decamelize';
 use String::RewritePrefix;
 
@@ -89,6 +90,12 @@ parameter namespace => (
     predicate => 1,
 );
 
+parameter use_all => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
+
 # TODO use rewrite prefix to look for traits in namespace
 
 role {
@@ -112,7 +119,8 @@ role {
 
         ### finding for namespace: $ns
         my @mod =
-            map { s/^${ns}:://; $_ }
+            map { s/^${ns}:://; $_                  }
+            map { load_class($_) if $p->use_all; $_ }
             Module::Find::findallmod $ns
             ;
         $p->names->push(@mod);
