@@ -15,6 +15,7 @@ use MooseX::Util 'with_traits';
 
 use Module::Find 'findallmod';
 
+use Class::Load 'load_class';
 use String::CamelCase 'decamelize';
 use String::RewritePrefix;
 
@@ -34,7 +35,7 @@ parameters are given.
 
 One or more names that would be legal for the name parameter.
 
-=roleparam all_in_namespace (0|1)
+=roleparam all_in_namespace (Bool)
 
 True if all findable packages under the namespace should be used as related
 classes.  Defaults to false.
@@ -59,6 +60,11 @@ e.g.:
 
 ...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
 C<original_lwp__user_agent_class> attributes.
+
+=roleparam load_all (Bool)
+
+If set to true, all related classes are loaded as we find them.  Defaults to
+false.
 
 =cut
 
@@ -89,6 +95,12 @@ parameter namespace => (
     predicate => 1,
 );
 
+parameter load_all => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
+
 # TODO use rewrite prefix to look for traits in namespace
 
 role {
@@ -112,7 +124,8 @@ role {
 
         ### finding for namespace: $ns
         my @mod =
-            map { s/^${ns}:://; $_ }
+            map { s/^${ns}:://; $_                  }
+            map { load_class($_) if $p->load_all; $_ }
             Module::Find::findallmod $ns
             ;
         $p->names->push(@mod);
