@@ -216,23 +216,23 @@ __END__
         traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
         is      => 'lazy',
         isa     => PackageName, # MooseX::Types::Perl
-        default => sub { ... compose original class and traits ... },
+        builder => sub { ... compose original class and traits ... },
     );
 
     has thinger_class_traits => (
-        traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
+        traits  => [ Shortcuts ],
         is      => 'lazy',
         isa     => ArrayRef[PackageName],
-        default => sub { [ ] },
+        builder => sub { [ ] },
     );
 
     has original_thinger_class => (
-        traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
-        is      => 'lazy',
-        coerce  => 1,
-        isa     => LoadableClass, # MooseX::Types::LoadableClass
+        traits   => [ Shortcuts ],
+        is       => 'lazy',
+        isa      => LoadableClass, # MooseX::Types::LoadableClass
+        coerce   => 1,
         init_arg => undef,
-        default => sub { 'My::Framework::Thinger' },
+        builder  => sub { 'My::Framework::Thinger' },
     );
 
     # multiple related classes can be handled in one shot:
