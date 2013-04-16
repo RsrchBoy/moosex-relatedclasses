@@ -123,7 +123,7 @@ role {
 
         ### finding for namespace: $ns
         my @mod =
-            map { s/^${ns}:://; $_                  }
+            map { s/^${ns}:://; $_                   }
             map { load_class($_) if $p->load_all; $_ }
             Module::Find::findallmod $ns
             ;
@@ -139,7 +139,6 @@ role {
 sub _generate_one_attribute_set {
     my ($p, $name, %opts) = @_;
 
-    #my $name = $p->namespace . '::' . $p->name;
     my $full_name
         = $p->namespace
         ? $p->namespace . '::' . $name
