@@ -5,8 +5,8 @@ package MooseX::RelatedClasses;
 use MooseX::Role::Parameterized;
 use namespace::autoclean;
 use autobox::Core;
+use autobox::Camelize;
 use MooseX::AttributeShortcuts 0.015;
-use MooseX::Traits;
 use MooseX::Types::Common::String ':all';
 use MooseX::Types::LoadableClass ':all';
 use MooseX::Types::Perl ':all';
@@ -16,7 +16,6 @@ use MooseX::Util 'with_traits';
 use Module::Find 'findallmod';
 
 use Class::Load 'load_class';
-use String::CamelCase 'decamelize';
 use String::RewritePrefix;
 
 =roleparam name
@@ -147,8 +146,8 @@ sub _generate_one_attribute_set {
         : $name
         ;
 
-    my $local_name           = decamelize($name) . '_class';
-    $local_name              =~ s/::/__/g; # SomeThing::More -> some_thing__more
+    # SomeThing::More -> some_thing__more
+    my $local_name           = $name->decamelize . '_class';
     my $original_local_name  = "original_$local_name";
     my $traitsfor_local_name = $local_name . '_traits';
 
@@ -158,6 +157,7 @@ sub _generate_one_attribute_set {
         isa      => LoadableClass,
         coerce   => 1,
         init_arg => "$local_name",
+        builder  => sub { $full_name },
     );
 
     has $local_name => (
@@ -165,6 +165,13 @@ sub _generate_one_attribute_set {
         is       => 'lazy',
         isa      => LoadableClass,
         init_arg => undef,
+        builder  => sub {
+            my $self = shift @_;
+
+            return with_traits( $self->$original_local_name() =>
+                $self->$traitsfor_local_name()->flatten,
+            );
+        },
     );
 
     # XXX do the same original/local init_arg swizzle here too?
@@ -172,21 +179,13 @@ sub _generate_one_attribute_set {
         traits  => [Shortcuts, 'Array'],
         is      => 'lazy',
         isa     => ArrayRef[LoadableRole],
+        builder => sub { [ ] },
         handles => {
             "has_$traitsfor_local_name" => 'count',
         },
     );
 
-    method "_build_original_$local_name" => sub { $full_name };
-    method "_build_$local_name" => sub {
-        my $self = shift @_;
-
-        return with_traits($self->$original_local_name(),
-            $self->$traitsfor_local_name()->flatten,
-        );
-    };
-
-    method "_build_$traitsfor_local_name" => sub { [ ] };
+    return;
 }
 
 !!42;
