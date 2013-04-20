@@ -1,7 +1,5 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
-
 0.003     2013-04-19 22:38:58 PDT-0700
 	* add support for "private" related classes
 
