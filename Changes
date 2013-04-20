@@ -2,6 +2,9 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.003     2013-04-19 22:38:58 PDT-0700
+	* add support for "private" related classes
+
 0.002     2012-11-03 23:29:48 PST8PDT
 	* add support for "blank" namespaces, that is, the ability to specify
 	  arbitrary classes as "related"
