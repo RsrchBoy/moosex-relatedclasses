@@ -18,6 +18,9 @@ use Module::Find 'findallmod';
 use Class::Load 'load_class';
 use String::RewritePrefix;
 
+# debugging...
+#use Smart::Comments '###';
+
 =roleparam name
 
 The name of a class, without the prefix, to consider related.  e.g. if My::Foo
@@ -65,6 +68,12 @@ C<original_lwp__user_agent_class> attributes.
 If set to true, all related classes are loaded as we find them.  Defaults to
 false.
 
+=roleparam private (Bool)
+
+If true, attributes, accessors and builders will all be named according to the
+same rules L<MooseX::AttributeShortcuts> uses.  (That is, in general prefixed
+with an "_".)
+
 =cut
 
 parameter name  => (
@@ -99,6 +108,8 @@ parameter load_all => (
     isa     => 'Bool',
     default => 0,
 );
+
+parameter private => (is => 'ro', isa => 'Bool', default => 0);
 
 # TODO use rewrite prefix to look for traits in namespace
 
@@ -145,21 +156,26 @@ sub _generate_one_attribute_set {
         : $name
         ;
 
+    my $pvt = $p->private ? '_' : q{};
+
     # SomeThing::More -> some_thing__more
     my $local_name           = $name->decamelize . '_class';
     my $original_local_name  = "original_$local_name";
+    my $original_reader      = "$pvt$original_local_name";
     my $traitsfor_local_name = $local_name . '_traits';
+    my $traitsfor_reader     = "$pvt$traitsfor_local_name";
 
-    has $original_local_name => (
+    ### $full_name
+    has "$pvt$original_local_name" => (
         traits   => [Shortcuts],
         is       => 'lazy',
         isa      => LoadableClass,
         coerce   => 1,
-        init_arg => "$local_name",
+        init_arg => "$pvt$local_name",
         builder  => sub { $full_name },
     );
 
-    has $local_name => (
+    has "$pvt$local_name" => (
         traits   => [Shortcuts],
         is       => 'lazy',
         isa      => LoadableClass,
@@ -167,20 +183,20 @@ sub _generate_one_attribute_set {
         builder  => sub {
             my $self = shift @_;
 
-            return with_traits( $self->$original_local_name() =>
-                $self->$traitsfor_local_name()->flatten,
+            return with_traits( $self->$original_reader() =>
+                $self->$traitsfor_reader()->flatten,
             );
         },
     );
 
     # XXX do the same original/local init_arg swizzle here too?
-    has $traitsfor_local_name => (
+    has "$pvt$traitsfor_local_name" => (
         traits  => [Shortcuts, 'Array'],
         is      => 'lazy',
         isa     => ArrayRef[LoadableRole],
         builder => sub { [ ] },
         handles => {
-            "has_$traitsfor_local_name" => 'count',
+            "${pvt}has_$traitsfor_local_name" => 'count',
         },
     );
 
