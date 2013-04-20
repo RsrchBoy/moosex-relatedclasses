@@ -1,18 +1,12 @@
-=pod
-
-=encoding utf-8
-
-=for :stopwords Chris Weyl
-
-=head1 NAME
+# NAME
 
 MooseX::RelatedClasses - Parameterized role for related class attributes
 
-=head1 VERSION
+# VERSION
 
-This document describes version 0.002 of MooseX::RelatedClasses - released November 03, 2012 as part of MooseX-RelatedClasses.
+This document describes version 0.003 of MooseX::RelatedClasses - released April 19, 2013 as part of MooseX-RelatedClasses.
 
-=head1 SYNOPSIS
+# SYNOPSIS
 
     # a related class...
     package My::Framework::Thinger;
@@ -34,23 +28,23 @@ This document describes version 0.002 of MooseX::RelatedClasses - released Novem
         traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
         is      => 'lazy',
         isa     => PackageName, # MooseX::Types::Perl
-        default => sub { ... compose original class and traits ... },
+        builder => sub { ... compose original class and traits ... },
     );
 
     has thinger_class_traits => (
-        traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
+        traits  => [ Shortcuts ],
         is      => 'lazy',
         isa     => ArrayRef[PackageName],
-        default => sub { [ ] },
+        builder => sub { [ ] },
     );
 
     has original_thinger_class => (
-        traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
-        is      => 'lazy',
-        coerce  => 1,
-        isa     => LoadableClass, # MooseX::Types::LoadableClass
+        traits   => [ Shortcuts ],
+        is       => 'lazy',
+        isa      => LoadableClass, # MooseX::Types::LoadableClass
+        coerce   => 1,
         init_arg => undef,
-        default => sub { 'My::Framework::Thinger' },
+        builder  => sub { 'My::Framework::Thinger' },
     );
 
     # multiple related classes can be handled in one shot:
@@ -73,7 +67,7 @@ This document describes version 0.002 of MooseX::RelatedClasses - released Novem
         name      => 'LWP::UserAgent',
     };
 
-=head1 DESCRIPTION
+# DESCRIPTION
 
 Have you ever built out a framework, or interface API of some sort, to
 discover either that you were hardcoding your related class names (not very
@@ -87,23 +81,23 @@ way to make that difficult-to-impossible without a significant effort?
 This package aims to end that, by providing an easy, flexible way of defining
 "related classes", their base class, and allowing traits to be specified.
 
-=head2 This is early code!
+## This is early code!
 
 This package is very new, and is still being vetted "in use", as it were.  The
 documentation (or tests) may not be 100%, but it's in active use.  Pull
 requests are happily received :)
 
-=head2 Documentation
+## Documentation
 
 See the SYNOPSIS for information; the tests are also useful here as well.
 
-I _did_ warn you this is a very early release, right?
+I \_did\_ warn you this is a very early release, right?
 
-=head1 ROLE PARAMETERS
+# ROLE PARAMETERS
 
 Parameterized roles accept parameters that influence their construction.  This role accepts the following parameters.
 
-=head2 name
+## name
 
 The name of a class, without the prefix, to consider related.  e.g. if My::Foo
 is our namespace and My::Foo::Bar is the related class:
@@ -112,19 +106,19 @@ is our namespace and My::Foo::Bar is the related class:
 
 ...is the correct specification.
 
-This parameter is optional, so long as either the names or all_in_namespace
+This parameter is optional, so long as either the names or all\_in\_namespace
 parameters are given.
 
-=head2 names [ ... ]
+## names \[ ... \]
 
 One or more names that would be legal for the name parameter.
 
-=head2 all_in_namespace (0|1)
+## all\_in\_namespace (Bool)
 
 True if all findable packages under the namespace should be used as related
 classes.  Defaults to false.
 
-=head2 namespace
+## namespace
 
 The namespace our related classes live in.  If this is not given explicitly,
 the name of the consuming class will be used as the namespace.  If the
@@ -133,7 +127,7 @@ other than a consumer), then this parameter is mandatory.
 
 This parameter will also accept an explicit 'undef'.  If this is the case,
 then related classes must be specified by their full name and it is an error
-to attempt to enable the all_in_namespace option.
+to attempt to enable the all\_in\_namespace option.
 
 e.g.:
 
@@ -142,13 +136,24 @@ e.g.:
         name      => 'LWP::UserAgent',
     };
 
-...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
-C<original_lwp__user_agent_class> attributes.
+...will provide the `lwp__user_agent_class`, `lwp__user_agent_traits` and
+`original_lwp__user_agent_class` attributes.
 
-=head1 INSPIRATION / MADNESS
+## load\_all (Bool)
 
-The L<Class::MOP> / L<Moose> MOP show the beginnings of this:  with attributes
-or methods named a certain way (e.g. *_metaclass()) the class to be used for a
+If set to true, all related classes are loaded as we find them.  Defaults to
+false.
+
+## private (Bool)
+
+If true, attributes, accessors and builders will all be named according to the
+same rules ["Moose" in lazy\_build](http://search.cpan.org/perldoc?lazy\_build#Moose) and [MooseX::AttributeShortcuts](http://search.cpan.org/perldoc?MooseX::AttributeShortcuts) use.  (That
+is, in general prefixed with an "\_".)
+
+# INSPIRATION / MADNESS
+
+The [Class::MOP](http://search.cpan.org/perldoc?Class::MOP) / [Moose](http://search.cpan.org/perldoc?Moose) MOP show the beginnings of this:  with attributes
+or methods named a certain way (e.g. \*\_metaclass()) the class to be used for a
 particular thing (e.g. attribute metaclass) is stored in a fashion such that a
 subclass (or trait) may overwrite and provide a different class name to be
 used.
@@ -157,13 +162,13 @@ So too, here, we do this, but in a more flexible way: we track the original
 related class, any additional traits that should be applied, and the new
 (anonymous, typically) class name of the related class.
 
-Another example is the (very useful and usable) L<Net::Amazon::EC2>.  It uses
-L<Moose>, is nicely broken out into discrete classes, etc, but does not lend
+Another example is the (very useful and usable) [Net::Amazon::EC2](http://search.cpan.org/perldoc?Net::Amazon::EC2).  It uses
+[Moose](http://search.cpan.org/perldoc?Moose), is nicely broken out into discrete classes, etc, but does not lend
 itself to easy on-the-fly extension by developers with traits.
 
-=head1 ANONYMOUS CLASS NAMES
+# ANONYMOUS CLASS NAMES
 
-Note that we use L<MooseX::Traitor> to compose anonymous classes, so the
+Note that we use [MooseX::Traitor](http://search.cpan.org/perldoc?MooseX::Traitor) to compose anonymous classes, so the
 "anonymous names" will look less like:
 
     Moose::Meta::Package::__ANON__::SERIAL::...
@@ -175,12 +180,12 @@ And more like:
 Anonymous classes are only ever composed if traits for a related class are
 supplied.
 
-=head1 SOURCE
+# SOURCE
 
-The development version is on github at L<http://github.com/RsrchBoy/moosex-relatedclasses>
-and may be cloned from L<git://github.com/RsrchBoy/moosex-relatedclasses.git>
+The development version is on github at [http://github.com/RsrchBoy/moosex-relatedclasses](http://github.com/RsrchBoy/moosex-relatedclasses)
+and may be cloned from [git://github.com/RsrchBoy/moosex-relatedclasses.git](git://github.com/RsrchBoy/moosex-relatedclasses.git)
 
-=head1 BUGS
+# BUGS
 
 Please report any bugs or feature requests on the bugtracker website
 https://github.com/RsrchBoy/moosex-relatedclasses/issues
@@ -189,15 +194,14 @@ When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
 feature.
 
-=head1 AUTHOR
+# AUTHOR
 
 Chris Weyl <cweyl@alumni.drew.edu>
 
-=head1 COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 This software is Copyright (c) 2012 by Chris Weyl.
 
 This is free software, licensed under:
 
-  The GNU Lesser General Public License, Version 2.1, February 1999
-
+    The GNU Lesser General Public License, Version 2.1, February 1999
