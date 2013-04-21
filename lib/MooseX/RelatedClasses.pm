@@ -170,6 +170,7 @@ sub _generate_one_attribute_set {
         traits   => [Shortcuts],
         is       => 'lazy',
         isa      => LoadableClass,
+        constraint => sub { $_->isa($full_name) },
         coerce   => 1,
         init_arg => "$pvt$local_name",
         builder  => sub { $full_name },
@@ -179,6 +180,7 @@ sub _generate_one_attribute_set {
         traits   => [Shortcuts],
         is       => 'lazy',
         isa      => LoadableClass,
+        constraint => sub { $_->isa($full_name) },
         init_arg => undef,
         builder  => sub {
             my $self = shift @_;

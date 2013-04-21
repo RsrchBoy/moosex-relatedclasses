@@ -1,5 +1,6 @@
 use Test::More;
 use Test::Moose::More 0.014;
+use Test::Fatal;
 use Moose::Util::TypeConstraints 'class_type';
 
 use MooseX::Types::Moose ':all';
@@ -21,6 +22,8 @@ use MooseX::Types::Moose ':all';
 }
 { package TestClass::Baz;    use Moose; use namespace::autoclean }
 { package TestClass::Kraken; use Moose; use namespace::autoclean }
+
+{ package TestClass::Bar; use Moose; use namespace::autoclean; extends 'TestClass::Baz' }
 
 with_immutable {
 
@@ -76,6 +79,15 @@ with_immutable {
 
     is $tc->baz_class(),     'TestClass::Baz',    'baz_class() is correct';
     is $tc->_kraken_class(), 'TestClass::Kraken', '_kraken_class() is correct';
+
+    my $dies = exception { $tc = TestClass->new(baz_class => 'TestClass::Kraken'); $tc->baz_class };
+    ok $dies, 'baz_class dies when attempting to set it to an incorrect class';
+
+    is
+        exception { TestClass->new(baz_class => 'TestClass::Bar')->baz_class },
+        undef,
+        'attribute lives on subclass via constructor',
+        ;
 
 } 'TestClass';
 
