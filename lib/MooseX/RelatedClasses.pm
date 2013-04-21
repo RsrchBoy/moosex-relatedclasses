@@ -6,7 +6,7 @@ use MooseX::Role::Parameterized;
 use namespace::autoclean;
 use autobox::Core;
 use autobox::Camelize;
-use MooseX::AttributeShortcuts 0.015;
+use MooseX::AttributeShortcuts 0.019;
 use MooseX::Types::Common::String ':all';
 use MooseX::Types::LoadableClass ':all';
 use MooseX::Types::Perl ':all';
@@ -181,6 +181,7 @@ sub _generate_one_attribute_set {
         is         => 'lazy',
         isa        => LoadableClass,
         constraint => sub { $_->isa($full_name) },
+        coerce     => 1,
         init_arg   => undef,
         builder    => sub {
             my $self = shift @_;
