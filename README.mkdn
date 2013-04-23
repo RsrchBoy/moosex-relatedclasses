@@ -4,7 +4,7 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.003 of MooseX::RelatedClasses - released April 19, 2013 as part of MooseX-RelatedClasses.
+This document describes version 0.004 of MooseX::RelatedClasses - released April 22, 2013 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 
@@ -25,26 +25,28 @@ This document describes version 0.003 of MooseX::RelatedClasses - released April
 
     # ...we get:
     has thinger_class => (
-        traits  => [ Shortcuts ], # MooseX::AttributeShortcuts
-        is      => 'lazy',
-        isa     => PackageName, # MooseX::Types::Perl
-        builder => sub { ... compose original class and traits ... },
+        traits     => [ Shortcuts ], # MooseX::AttributeShortcuts
+        is         => 'lazy',
+        isa        => LoadableClass, # MooseX::Types::LoadableClass
+        constraint => sub { $_->isa('Thinger') }, # MX::AttributeShortcuts
+        builder    => sub { ... compose original class and traits ... },
     );
 
     has thinger_class_traits => (
         traits  => [ Shortcuts ],
         is      => 'lazy',
-        isa     => ArrayRef[PackageName],
+        isa     => ArrayRef[LoadableRole],
         builder => sub { [ ] },
     );
 
     has original_thinger_class => (
-        traits   => [ Shortcuts ],
-        is       => 'lazy',
-        isa      => LoadableClass, # MooseX::Types::LoadableClass
-        coerce   => 1,
-        init_arg => undef,
-        builder  => sub { 'My::Framework::Thinger' },
+        traits     => [ Shortcuts ],
+        is         => 'lazy',
+        isa        => LoadableClass,
+        constraint => sub { $_->isa('Thinger') },
+        coerce     => 1,
+        init_arg   => undef,
+        builder    => sub { 'My::Framework::Thinger' },
     );
 
     # multiple related classes can be handled in one shot:
@@ -147,8 +149,8 @@ false.
 ## private (Bool)
 
 If true, attributes, accessors and builders will all be named according to the
-same rules ["Moose" in lazy\_build](http://search.cpan.org/perldoc?lazy\_build#Moose) and [MooseX::AttributeShortcuts](http://search.cpan.org/perldoc?MooseX::AttributeShortcuts) use.  (That
-is, in general prefixed with an "\_".)
+same rules [MooseX::AttributeShortcuts](http://search.cpan.org/perldoc?MooseX::AttributeShortcuts) uses.  (That is, in general prefixed
+with an "\_".)
 
 # INSPIRATION / MADNESS
 
