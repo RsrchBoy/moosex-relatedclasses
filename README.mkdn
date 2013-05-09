@@ -4,7 +4,7 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.004 of MooseX::RelatedClasses - released April 22, 2013 as part of MooseX-RelatedClasses.
+This document describes version 0.005 of MooseX::RelatedClasses - released May 09, 2013 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 

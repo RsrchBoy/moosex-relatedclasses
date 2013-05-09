@@ -2,6 +2,9 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.005     2013-05-09 16:38:09 PDT-0700
+	* add custom camelization feature -- tested, but not documented yet.
+
 0.004     2013-04-22 21:08:28 PDT-0700
 	* add constraint checking to ensure that our classes, as stored, are
 	  actually related to the original related class
