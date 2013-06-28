@@ -11,7 +11,7 @@ use MooseX::Types::Common::String ':all';
 use MooseX::Types::LoadableClass ':all';
 use MooseX::Types::Perl ':all';
 use MooseX::Types::Moose ':all';
-use MooseX::Util 'with_traits';
+use MooseX::Util 'with_traits', 'find_meta';
 
 use Module::Find 'findallmod';
 
@@ -21,6 +21,19 @@ use String::RewritePrefix;
 # debugging...
 #use Smart::Comments '###';
 #use autobox::JSON;
+
+use Moose::Exporter;
+Moose::Exporter->setup_import_methods(
+    with_meta => [ qw{ related_classes related_class } ],
+);
+
+sub related_class { goto \&related_classes }
+
+sub related_classes {
+    my ($meta, %args) = @_;
+
+    find_meta('MooseX::RelatedClasses')->apply($meta, %args);
+}
 
 =roleparam name
 

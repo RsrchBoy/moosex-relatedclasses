@@ -10,15 +10,10 @@ use MooseX::Types::Moose ':all';
 
     use Moose;
     use namespace::autoclean;
+    use MooseX::RelatedClasses;
 
-    with 'MooseX::RelatedClasses' => {
-        name => 'Baz',
-    };
-
-    with 'MooseX::RelatedClasses' => {
-        name    => 'Kraken',
-        private => 1,
-    };
+    related_class name => 'Baz';
+    related_class name => 'Kraken', private => 1;
 }
 { package TestClass::Baz;    use Moose; use namespace::autoclean }
 { package TestClass::Kraken; use Moose; use namespace::autoclean }
