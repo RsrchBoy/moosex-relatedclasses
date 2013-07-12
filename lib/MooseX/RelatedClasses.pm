@@ -245,7 +245,7 @@ sub _generate_one_attribute_set {
 !!42;
 __END__
 
-=for :stopwords Parameterized
+=for :stopwords Parameterized Namespacing
 
 =head1 SYNOPSIS
 
