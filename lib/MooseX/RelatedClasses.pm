@@ -35,18 +35,12 @@ Synonym for L</related_classes()>.
 
 Takes the same options that the role takes as parameters.  That means that this:
 
-    use Moose;
-    use MooseX::RelatedClasses 0.004;
-
     related_classes name => 'LWP::UserAgent', namespace => undef;
 
 ...is effectively the same as:
 
-    use Moose;
-
     with 'MooseX::RelatedClasses' => {
-        -version => '0.004',
-        name => 'LWP::UserAgent',
+        name      => 'LWP::UserAgent',
         namespace => undef,
     };
 
@@ -254,27 +248,28 @@ __END__
 
 =head1 SYNOPSIS
 
-    # a related class...
-    package My::Framework::Thinger;
-    # ...
-
-    # our "parent" class...
-    package My::Framework;
-
-    use Moose;
-    use namespace::autoclean;
-
-    # with this...
+    # with this:
     with 'MooseX::RelatedClasses' => {
-        name => 'Thinger',
+        name => 'Thinger', namespace => undef,
     };
 
-    # ...we get:
+    # ...or this (preferred):
+    use MooseX::RelatedClasses;
+    related_class name => 'Thinger', namespace => undef;
+
+    # ...we get three attributes:
+    #
+    #   thinger_class
+    #   thinger_class_traits
+    #   original_thinger_class
+    #
+    # ...and they look like this:
+
     has thinger_class => (
-        traits     => [ Shortcuts ], # MooseX::AttributeShortcuts
-        is         => 'lazy',
-        isa        => LoadableClass, # MooseX::Types::LoadableClass
-        constraint => sub { $_->isa('Thinger') }, # MX::AttributeShortcuts
+        traits     => [ Shortcuts ],                # MooseX::AttributeShortcuts
+        is         => 'lazy',                       # MX::AttributeShortcuts
+        isa        => LoadableClass,                # MooseX::Types::LoadableClass
+        constraint => sub { $_->isa('Thinger') },   # MX::AttributeShortcuts
         builder    => sub { ... compose original class and traits ... },
     );
 
@@ -295,25 +290,6 @@ __END__
         builder    => sub { 'My::Framework::Thinger' },
     );
 
-    # multiple related classes can be handled in one shot:
-    with 'MooseX::RelatedClasses' => {
-        names => [ qw{ Thinger Dinger Finger } ],
-    };
-
-    # if you're using this role and the name of the class is _not_ your
-    # related namespace, then you can specify it:
-    with 'MooseX::RelatedClasses' => {
-        # e.g. My::Framework::Recorder::Thinger
-        name      => 'Thinger',
-        namespace => 'My::Framework::Recorder',
-    };
-
-    # if you want to specify another class w/o any common namespace as
-    # related:
-    with 'MooseX::RelatedClasses' => {
-        namespace => undef,
-        name      => 'LWP::UserAgent',
-    };
 
 =head1 DESCRIPTION
 
