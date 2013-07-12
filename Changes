@@ -2,6 +2,10 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.006     2013-07-12 00:04:42 CDT-0500
+	* document the related_class() and related_class() sugar helpers
+	* much doc/pod restructuring
+
 0.005     2013-05-09 16:38:09 PDT-0700
 	* add custom camelization feature -- tested, but not documented yet.
 
