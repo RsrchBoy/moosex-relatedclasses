@@ -79,8 +79,9 @@ classes.  Defaults to false.
 
 The namespace our related classes live in.  If this is not given explicitly,
 the name of the consuming class will be used as the namespace.  If the
-consuming class is not available (e.g. it's being constructed by something
-other than a consumer), then this parameter is mandatory.
+consuming class' metaclass is not available (e.g. the role is being
+constructed by something other than a consumer), then this parameter is
+mandatory.
 
 This parameter will also accept an explicit 'undef'.  If this is the case,
 then related classes must be specified by their full name and it is an error
