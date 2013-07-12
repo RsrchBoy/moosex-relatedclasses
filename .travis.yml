@@ -23,4 +23,4 @@ install:
 
 script:
    - export DZSIGN=archive
-   - dzil smoke --release --author
+   - dzil smoke
