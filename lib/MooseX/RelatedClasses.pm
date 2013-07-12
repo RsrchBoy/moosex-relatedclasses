@@ -27,6 +27,31 @@ Moose::Exporter->setup_import_methods(
     with_meta => [ qw{ related_classes related_class } ],
 );
 
+=sugar related_class()
+
+Synonym for L</related_classes()>.
+
+=sugar related_classes()
+
+Takes the same options that the role takes as parameters.  That means that this:
+
+    use Moose;
+    use MooseX::RelatedClasses 0.004;
+
+    related_classes name => 'LWP::UserAgent', namespace => undef;
+
+...is effectively the same as:
+
+    use Moose;
+
+    with 'MooseX::RelatedClasses' => {
+        -version => '0.004',
+        name => 'LWP::UserAgent',
+        namespace => undef,
+    };
+
+=cut
+
 sub related_class { goto \&related_classes }
 
 sub related_classes {
