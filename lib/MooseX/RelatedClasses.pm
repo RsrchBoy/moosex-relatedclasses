@@ -317,6 +317,62 @@ See the SYNOPSIS for information; the tests are also useful here as well.
 
 I _did_ warn you this is a very early release, right?
 
+=head1 EXAMPLES
+
+=head2 Multiple Related Classes at Once
+
+Use the L</names> option with an array reference of classes, and attribute
+sets will be built for all of them.
+
+    related_classes names => [ qw{ Thinger Dinger Finger } ];
+
+=head2 Namespaces / Namespacing
+
+Normally, related classes tend to be under the namespace of the class they
+are related to.  For example, let's say we have a class named C<TimeLords>.
+Related to this class are C<TimeLords::SoftwareWritten::Git>,
+C<TimeLords::Gallifrey> and C<TimeLords::Enemies::Daleks>.
+
+The C<TimeLords> package can start off like this, to include the proper
+related classes:
+
+    package TimeLords;
+
+    use Moose;
+    use timeandspace::autoclean;
+    use MooseX::RelatedClasses;
+
+    related_classes
+        names => [ qw{ Gallifrey Enemies::Daleks SoftwareWritten::Git } ],
+        ;
+
+And that will generate the expected related class attributes:
+
+    gallifrey_class
+    gallifrey_class_traits
+    original_gallifrey_class
+    enemies__daleks_class
+    enemies__daleks_class_traits
+    original_enemies__daleks_class
+    software_written__git_class
+    software_written__git_class_traits
+    original_software_written__git_class
+
+=head2 Related classes outside the namespace
+
+Occasionally you'll want to use something like L<LWP::UserAgent>, which has
+nothing to do with your class except that you use it, and would like to be
+able to easily tweak it on the fly.  This can be done with the C<undef>
+namespace:
+
+    related_class name => 'LWP::UserAgent', namespace => undef;
+
+This will cause the following related class attributes to be generated:
+
+    lwp__user_agent_class
+    lwp__user_agent_class_traits
+    original_lwp__user_agent_class
+
 =head1 INSPIRATION / MADNESS
 
 The L<Class::MOP> / L<Moose> MOP show the beginnings of this:  with attributes
