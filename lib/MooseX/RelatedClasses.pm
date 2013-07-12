@@ -27,11 +27,11 @@ Moose::Exporter->setup_import_methods(
     with_meta => [ qw{ related_classes related_class } ],
 );
 
-=sugar related_class()
+=func related_class()
 
 Synonym for L</related_classes()>.
 
-=sugar related_classes()
+=func related_classes()
 
 Takes the same options that the role takes as parameters.  That means that this:
 
