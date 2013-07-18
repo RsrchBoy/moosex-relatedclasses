@@ -18,10 +18,6 @@ use Module::Find 'findallmod';
 use Class::Load 'load_class';
 use String::RewritePrefix;
 
-# debugging...
-#use Smart::Comments '###';
-#use autobox::JSON;
-
 use Moose::Exporter;
 Moose::Exporter->setup_import_methods(
     with_meta => [ qw{ related_classes related_class } ],
