@@ -6,7 +6,7 @@ use MooseX::Role::Parameterized;
 use namespace::autoclean;
 use autobox::Core;
 use autobox::Camelize;
-use MooseX::AttributeShortcuts 0.019;
+use MooseX::AttributeShortcuts 0.020;
 use MooseX::Types::Common::String ':all';
 use MooseX::Types::LoadableClass ':all';
 use MooseX::Types::Perl ':all';
@@ -121,10 +121,10 @@ parameter names => (
 
     isa        => HashRef[Identifier],
     constraint => sub { do { is_PackageName($_) or die 'keys must be PackageName' } for $_->keys; 1 },
-    coerce     => {
+    coerce     => [
         ArrayRef()    => sub { +{ map { $_ => $_->decamelize } @$_ } },
         PackageName() => sub { +{       $_ => $_->decamelize       } },
-    },
+    ],
 
     default => sub { confess 'name parameter required!' unless $_[0]->has_name; $_[0]->name },
 );
