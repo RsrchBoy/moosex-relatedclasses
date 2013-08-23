@@ -2,6 +2,10 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.007     2013-08-22 19:35:05 PDT-0700
+	* bump MXAS requirement to ensure we're using the latest coercion syntax
+	* ensure we pass type names, not instances, now
+
 0.006     2013-07-12 00:04:42 CDT-0500
 	* document the related_class() and related_class() sugar helpers
 	* much doc/pod restructuring
