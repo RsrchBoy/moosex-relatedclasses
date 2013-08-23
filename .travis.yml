@@ -15,6 +15,9 @@ branches:
     except:
         - "release/cpan"
 
+env:
+   - PERL_CPANM_OPT="--mirror http://cpan.mirrors.travis-ci.org --mirror-only -q"
+
 before_install:
    # git bits sometimes needed...
    - git config user.name 'Travis-CI'
