@@ -1,6 +1,6 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
+0.007     2013-08-22 19:23:01 PDT-0700
 
 0.006     2013-07-12 00:04:42 CDT-0500
 	* document the related_class() and related_class() sugar helpers
