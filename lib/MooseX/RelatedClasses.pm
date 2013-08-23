@@ -122,8 +122,8 @@ parameter names => (
     isa        => HashRef[Identifier],
     constraint => sub { do { is_PackageName($_) or die 'keys must be PackageName' } for $_->keys; 1 },
     coerce     => [
-        ArrayRef()    => sub { +{ map { $_ => $_->decamelize } @$_ } },
-        PackageName() => sub { +{       $_ => $_->decamelize       } },
+        ArrayRef              => sub { +{ map { $_ => $_->decamelize } @$_ } },
+        PackageName()->name() => sub { +{       $_ => $_->decamelize       } },
     ],
 
     default => sub { confess 'name parameter required!' unless $_[0]->has_name; $_[0]->name },
