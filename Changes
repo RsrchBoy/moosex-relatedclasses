@@ -1,7 +1,5 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
-
 0.007     2013-08-22 19:35:05 PDT-0700
 	* bump MXAS requirement to ensure we're using the latest coercion syntax
 	* ensure we pass type names, not instances, now
