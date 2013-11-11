@@ -4,7 +4,7 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.007 of MooseX::RelatedClasses - released August 22, 2013 as part of MooseX-RelatedClasses.
+This document describes version 0.008 of MooseX::RelatedClasses - released November 11, 2013 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 
@@ -13,9 +13,13 @@ This document describes version 0.007 of MooseX::RelatedClasses - released Augus
         name => 'Thinger', namespace => undef,
     };
 
-    # ...or this (preferred):
+    # this:
     use MooseX::RelatedClasses;
     related_class name => 'Thinger', namespace => undef;
+
+    # ...or this (preferred):
+    use MooseX::RelatedClasses;
+    related_class 'Thinger', namespace => undef;
 
     # ...we get three attributes:
     #
@@ -131,14 +135,14 @@ false.
 ## private (Bool)
 
 If true, attributes, accessors and builders will all be named according to the
-same rules [MooseX::AttributeShortcuts](http://search.cpan.org/perldoc?MooseX::AttributeShortcuts) uses.  (That is, in general prefixed
+same rules [MooseX::AttributeShortcuts](https://metacpan.org/pod/MooseX::AttributeShortcuts) uses.  (That is, in general prefixed
 with an "\_".)
 
 # FUNCTIONS
 
 ## related\_class()
 
-Synonym for ["related\_classes()"](#related\_classes()).
+Synonym for ["related_classes()"](#related_classes()).
 
 ## related\_classes()
 
@@ -160,6 +164,9 @@ Takes the same options that the role takes as parameters.  That means that this:
 Use the ["names"](#names) option with an array reference of classes, and attribute
 sets will be built for all of them.
 
+    related_classes [ qw{ Thinger Dinger Finger } ];
+
+    # or longhand:
     related_classes names => [ qw{ Thinger Dinger Finger } ];
 
 ## Namespaces / Namespacing
@@ -178,9 +185,7 @@ related classes:
     use timeandspace::autoclean;
     use MooseX::RelatedClasses;
 
-    related_classes
-        names => [ qw{ Gallifrey Enemies::Daleks SoftwareWritten::Git } ],
-        ;
+    related_classes [ qw{ Gallifrey Enemies::Daleks SoftwareWritten::Git } ];
 
 And that will generate the expected related class attributes:
 
@@ -196,12 +201,12 @@ And that will generate the expected related class attributes:
 
 ## Related classes outside the namespace
 
-Occasionally you'll want to use something like [LWP::UserAgent](http://search.cpan.org/perldoc?LWP::UserAgent), which has
+Occasionally you'll want to use something like [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent), which has
 nothing to do with your class except that you use it, and would like to be
 able to easily tweak it on the fly.  This can be done with the `undef`
 namespace:
 
-    related_class name => 'LWP::UserAgent', namespace => undef;
+    related_class 'LWP::UserAgent', namespace => undef;
 
 This will cause the following related class attributes to be generated:
 
@@ -211,7 +216,7 @@ This will cause the following related class attributes to be generated:
 
 # INSPIRATION / MADNESS
 
-The [Class::MOP](http://search.cpan.org/perldoc?Class::MOP) / [Moose](http://search.cpan.org/perldoc?Moose) MOP show the beginnings of this:  with attributes
+The [Class::MOP](https://metacpan.org/pod/Class::MOP) / [Moose](https://metacpan.org/pod/Moose) MOP show the beginnings of this:  with attributes
 or methods named a certain way (e.g. \*\_metaclass()) the class to be used for a
 particular thing (e.g. attribute metaclass) is stored in a fashion such that a
 subclass (or trait) may overwrite and provide a different class name to be
@@ -221,13 +226,13 @@ So too, here, we do this, but in a more flexible way: we track the original
 related class, any additional traits that should be applied, and the new
 (anonymous, typically) class name of the related class.
 
-Another example is the (very useful and usable) [Net::Amazon::EC2](http://search.cpan.org/perldoc?Net::Amazon::EC2).  It uses
-[Moose](http://search.cpan.org/perldoc?Moose), is nicely broken out into discrete classes, etc, but does not lend
+Another example is the (very useful and usable) [Net::Amazon::EC2](https://metacpan.org/pod/Net::Amazon::EC2).  It uses
+[Moose](https://metacpan.org/pod/Moose), is nicely broken out into discrete classes, etc, but does not lend
 itself to easy on-the-fly extension by developers with traits.
 
 # ANONYMOUS CLASS NAMES
 
-Note that we use [MooseX::Traitor](http://search.cpan.org/perldoc?MooseX::Traitor) to compose anonymous classes, so the
+Note that we use [MooseX::Traitor](https://metacpan.org/pod/MooseX::Traitor) to compose anonymous classes, so the
 "anonymous names" will look less like:
 
     Moose::Meta::Package::__ANON__::SERIAL::...
@@ -256,6 +261,10 @@ feature.
 # AUTHOR
 
 Chris Weyl <cweyl@alumni.drew.edu>
+
+# CONTRIBUTOR
+
+Kulag <g.kulag@gmail.com>
 
 # COPYRIGHT AND LICENSE
 

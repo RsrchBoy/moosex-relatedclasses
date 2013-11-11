@@ -2,6 +2,10 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.008     2013-11-11 00:38:34 PST-0800
+	* Allow the name/names parameter to related_class(es) to be omitted
+	  (github #1 -- Kulag)
+
 0.007     2013-08-22 19:35:05 PDT-0700
 	* bump MXAS requirement to ensure we're using the latest coercion syntax
 	* ensure we pass type names, not instances, now
