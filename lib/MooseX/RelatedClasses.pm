@@ -45,9 +45,13 @@ Takes the same options that the role takes as parameters.  That means that this:
 sub related_class { goto \&related_classes }
 
 sub related_classes {
-    my ($meta, %args) = @_;
+    my $meta = shift;
 
-    find_meta('MooseX::RelatedClasses')->apply($meta, %args);
+    if (@_ % 2 == 1) {
+        unshift @_, ref $_[0] ? 'names' : 'name';
+    }
+
+    find_meta('MooseX::RelatedClasses')->apply($meta, @_);
 }
 
 =roleparam name
@@ -250,9 +254,13 @@ __END__
         name => 'Thinger', namespace => undef,
     };
 
-    # ...or this (preferred):
+    # this:
     use MooseX::RelatedClasses;
     related_class name => 'Thinger', namespace => undef;
+
+    # ...or this (preferred):
+    use MooseX::RelatedClasses;
+    related_class 'Thinger', namespace => undef;
 
     # ...we get three attributes:
     #
@@ -321,6 +329,9 @@ I _did_ warn you this is a very early release, right?
 Use the L</names> option with an array reference of classes, and attribute
 sets will be built for all of them.
 
+    related_classes [ qw{ Thinger Dinger Finger } ];
+
+    # or longhand:
     related_classes names => [ qw{ Thinger Dinger Finger } ];
 
 =head2 Namespaces / Namespacing
@@ -339,9 +350,7 @@ related classes:
     use timeandspace::autoclean;
     use MooseX::RelatedClasses;
 
-    related_classes
-        names => [ qw{ Gallifrey Enemies::Daleks SoftwareWritten::Git } ],
-        ;
+    related_classes [ qw{ Gallifrey Enemies::Daleks SoftwareWritten::Git } ];
 
 And that will generate the expected related class attributes:
 
@@ -362,7 +371,7 @@ nothing to do with your class except that you use it, and would like to be
 able to easily tweak it on the fly.  This can be done with the C<undef>
 namespace:
 
-    related_class name => 'LWP::UserAgent', namespace => undef;
+    related_class 'LWP::UserAgent', namespace => undef;
 
 This will cause the following related class attributes to be generated:
 
