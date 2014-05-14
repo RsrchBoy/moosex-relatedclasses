@@ -1,4 +1,18 @@
+#
+# This file is part of MooseX-RelatedClasses
+#
+# This software is Copyright (c) 2012 by Chris Weyl.
+#
+# This is free software, licensed under:
+#
+#   The GNU Lesser General Public License, Version 2.1, February 1999
+#
 package MooseX::RelatedClasses;
+BEGIN {
+  $MooseX::RelatedClasses::AUTHORITY = 'cpan:RSRCHBOY';
+}
+# git description: 0.008-4-g0a99375
+$MooseX::RelatedClasses::VERSION = '0.009';
 
 # ABSTRACT: Parameterized role for related class attributes
 
@@ -26,24 +40,6 @@ Moose::Exporter->setup_import_methods(
     } ],
 );
 
-=func related_class()
-
-Synonym for L</related_classes()>.
-
-=func related_classes()
-
-Takes the same options that the role takes as parameters.  That means that this:
-
-    related_classes name => 'LWP::UserAgent', namespace => undef;
-
-...is effectively the same as:
-
-    with 'MooseX::RelatedClasses' => {
-        name      => 'LWP::UserAgent',
-        namespace => undef,
-    };
-
-=cut
 
 sub related_class { goto \&related_classes }
 
@@ -57,22 +53,6 @@ sub related_classes {
     find_meta('MooseX::RelatedClasses')->apply($meta, @_);
 }
 
-=func related_namespace()
-
-Given a namespace, declares that everything under that namespace is related.
-That is,
-
-    related_namespace 'Net::Amazon::EC2';
-
-...is the same as:
-
-    with 'MooseX::RelatedClasses' => {
-        namespace        => 'Net::Amazon::EC2',
-        name             => 'Net::Amazon::EC2',
-        all_in_namespace => 1,
-    };
-
-=cut
 
 sub related_namespace {
     my ($meta, $namespace) = (shift, shift);
@@ -88,61 +68,6 @@ sub related_namespace {
     find_meta('MooseX::RelatedClasses')->apply($meta, %args);
 }
 
-=roleparam name
-
-The name of a class, without the prefix, to consider related.  e.g. if My::Foo
-is our namespace and My::Foo::Bar is the related class:
-
-    name => 'Bar'
-
-...is the correct specification.
-
-This parameter is optional, so long as either the names or all_in_namespace
-parameters are given.
-
-=roleparam names [ ... ]
-
-One or more names that would be legal for the name parameter.
-
-=roleparam all_in_namespace (Bool)
-
-True if all findable packages under the namespace should be used as related
-classes.  Defaults to false.
-
-=roleparam namespace
-
-The namespace our related classes live in.  If this is not given explicitly,
-the name of the consuming class will be used as the namespace.  If the
-consuming class' metaclass is not available (e.g. the role is being
-constructed by something other than a consumer), then this parameter is
-mandatory.
-
-This parameter will also accept an explicit 'undef'.  If this is the case,
-then related classes must be specified by their full name and it is an error
-to attempt to enable the all_in_namespace option.
-
-e.g.:
-
-    with 'MooseX::RelatedClasses' => {
-        namespace => undef,
-        name      => 'LWP::UserAgent',
-    };
-
-...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
-C<original_lwp__user_agent_class> attributes.
-
-=roleparam load_all (Bool)
-
-If set to true, all related classes are loaded as we find them.  Defaults to
-false.
-
-=roleparam private (Bool)
-
-If true, attributes, accessors and builders will all be named according to the
-same rules L<MooseX::AttributeShortcuts> uses.  (That is, in general prefixed
-with an "_".)
-
-=cut
 
 parameter name  => (
     traits    => [Shortcuts],
@@ -280,9 +205,24 @@ sub _generate_one_attribute_set {
 }
 
 !!42;
+
 __END__
 
-=for :stopwords Parameterized Namespacing findable
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Chris Weyl Kulag Parameterized Namespacing findable
+
+=for :stopwords Wishlist flattr flattr'ed gittip gittip'ed
+
+=head1 NAME
+
+MooseX::RelatedClasses - Parameterized role for related class attributes
+
+=head1 VERSION
+
+This document describes version 0.009 of MooseX::RelatedClasses - released May 14, 2014 as part of MooseX-RelatedClasses.
 
 =head1 SYNOPSIS
 
@@ -333,7 +273,6 @@ __END__
         builder    => sub { 'My::Framework::Thinger' },
     );
 
-
 =head1 DESCRIPTION
 
 Have you ever built out a framework, or interface API of some sort, to
@@ -359,6 +298,98 @@ requests are happily received :)
 See the SYNOPSIS for information; the tests are also useful here as well.
 
 I _did_ warn you this is a very early release, right?
+
+=head1 ROLE PARAMETERS
+
+Parameterized roles accept parameters that influence their construction.  This role accepts the following parameters.
+
+=head2 name
+
+The name of a class, without the prefix, to consider related.  e.g. if My::Foo
+is our namespace and My::Foo::Bar is the related class:
+
+    name => 'Bar'
+
+...is the correct specification.
+
+This parameter is optional, so long as either the names or all_in_namespace
+parameters are given.
+
+=head2 names [ ... ]
+
+One or more names that would be legal for the name parameter.
+
+=head2 all_in_namespace (Bool)
+
+True if all findable packages under the namespace should be used as related
+classes.  Defaults to false.
+
+=head2 namespace
+
+The namespace our related classes live in.  If this is not given explicitly,
+the name of the consuming class will be used as the namespace.  If the
+consuming class' metaclass is not available (e.g. the role is being
+constructed by something other than a consumer), then this parameter is
+mandatory.
+
+This parameter will also accept an explicit 'undef'.  If this is the case,
+then related classes must be specified by their full name and it is an error
+to attempt to enable the all_in_namespace option.
+
+e.g.:
+
+    with 'MooseX::RelatedClasses' => {
+        namespace => undef,
+        name      => 'LWP::UserAgent',
+    };
+
+...will provide the C<lwp__user_agent_class>, C<lwp__user_agent_traits> and
+C<original_lwp__user_agent_class> attributes.
+
+=head2 load_all (Bool)
+
+If set to true, all related classes are loaded as we find them.  Defaults to
+false.
+
+=head2 private (Bool)
+
+If true, attributes, accessors and builders will all be named according to the
+same rules L<MooseX::AttributeShortcuts> uses.  (That is, in general prefixed
+with an "_".)
+
+=head1 FUNCTIONS
+
+=head2 related_class()
+
+Synonym for L</related_classes()>.
+
+=head2 related_classes()
+
+Takes the same options that the role takes as parameters.  That means that this:
+
+    related_classes name => 'LWP::UserAgent', namespace => undef;
+
+...is effectively the same as:
+
+    with 'MooseX::RelatedClasses' => {
+        name      => 'LWP::UserAgent',
+        namespace => undef,
+    };
+
+=head2 related_namespace()
+
+Given a namespace, declares that everything under that namespace is related.
+That is,
+
+    related_namespace 'Net::Amazon::EC2';
+
+...is the same as:
+
+    with 'MooseX::RelatedClasses' => {
+        namespace        => 'Net::Amazon::EC2',
+        name             => 'Net::Amazon::EC2',
+        all_in_namespace => 1,
+    };
 
 =head1 EXAMPLES
 
@@ -449,5 +480,54 @@ And more like:
 
 Anonymous classes are only ever composed if traits for a related class are
 supplied.
+
+=head1 SOURCE
+
+The development version is on github at L<http://https://github.com/RsrchBoy/moosex-relatedclasses>
+and may be cloned from L<git://https://github.com/RsrchBoy/moosex-relatedclasses.git>
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+https://github.com/RsrchBoy/moosex-relatedclasses/issues
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=head1 AUTHOR
+
+Chris Weyl <cweyl@alumni.drew.edu>
+
+=head2 I'm a material boy in a material world
+
+=begin html
+
+<a href="https://www.gittip.com/RsrchBoy/"><img src="https://raw.githubusercontent.com/gittip/www.gittip.com/master/www/assets/%25version/logo.png" /></a>
+<a href="http://bit.ly/rsrchboys-wishlist"><img src="http://wps.io/wp-content/uploads/2014/05/amazon_wishlist.resized.png" /></a>
+<a href="https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatedclasses&title=RsrchBoy's%20CPAN%20MooseX-RelatedClasses&tags=%22RsrchBoy's%20MooseX-RelatedClasses%20in%20the%20CPAN%22"><img src="http://api.flattr.com/button/flattr-badge-large.png" /></a>
+
+=end html
+
+Please note B<I do not expect to be gittip'ed or flattr'ed for this work>,
+rather B<it is simply a very pleasant surprise>. I largely create and release
+works like this because I need them or I find it enjoyable; however, don't let
+that stop you if you feel like it ;)
+
+L<Flattr this|https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatedclasses&title=RsrchBoy's%20CPAN%20MooseX-RelatedClasses&tags=%22RsrchBoy's%20MooseX-RelatedClasses%20in%20the%20CPAN%22>,
+L<gittip me|https://www.gittip.com/RsrchBoy/>, or indulge my
+L<Amazon Wishlist|http://bit.ly/rsrchboys-wishlist>...  If you so desire.
+
+=head1 CONTRIBUTOR
+
+Kulag <g.kulag@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2012 by Chris Weyl.
+
+This is free software, licensed under:
+
+  The GNU Lesser General Public License, Version 2.1, February 1999
 
 =cut

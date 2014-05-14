@@ -1,7 +1,5 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
-
 0.009     2014-05-14 00:51:43 PDT-0700
 	* add related_namespace() sugar
 	* fix some inaccurate code in SYNOPSIS
