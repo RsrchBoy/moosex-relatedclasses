@@ -20,7 +20,10 @@ use String::RewritePrefix;
 
 use Moose::Exporter;
 Moose::Exporter->setup_import_methods(
-    with_meta => [ qw{ related_classes related_class } ],
+    with_meta => [ qw{
+        related_classes   related_class
+        related_namespace
+    } ],
 );
 
 =func related_class()
@@ -52,6 +55,37 @@ sub related_classes {
     }
 
     find_meta('MooseX::RelatedClasses')->apply($meta, @_);
+}
+
+=func related_namespace()
+
+Given a namespace, declares that everything under that namespace is related.
+That is,
+
+    related_namespace 'Net::Amazon::EC2';
+
+...is the same as:
+
+    with 'MooseX::RelatedClasses' => {
+        namespace        => 'Net::Amazon::EC2',
+        name             => 'Net::Amazon::EC2',
+        all_in_namespace => 1,
+    };
+
+=cut
+
+sub related_namespace {
+    my ($meta, $namespace) = (shift, shift);
+
+    my %args = (
+        all_in_namespace => 1,
+        namespace        => $namespace,
+        name             => $namespace,
+        @_,
+    );
+
+    ### %args
+    find_meta('MooseX::RelatedClasses')->apply($meta, %args);
 }
 
 =roleparam name
@@ -165,14 +199,17 @@ role {
 
         confess 'Cannot use an empty namespace and all_in_namespace!'
             unless $p->has_namespace;
+
         my $ns = $p->namespace;
 
         ### finding for namespace: $ns
         my %mod =
             map { s/^${ns}:://; $_ => $_->decamelize }
             map { load_class($_) if $p->load_all; $_ }
-            Module::Find::findallmod $p->namespace
+            Module::Find::findallmod $ns
             ;
+
+        ### %mod
         $p->_set_names(\%mod);
     }
 
@@ -245,7 +282,7 @@ sub _generate_one_attribute_set {
 !!42;
 __END__
 
-=for :stopwords Parameterized Namespacing
+=for :stopwords Parameterized Namespacing findable
 
 =head1 SYNOPSIS
 
