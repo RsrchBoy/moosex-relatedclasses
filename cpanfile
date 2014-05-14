@@ -27,6 +27,7 @@ on 'test' => sub {
   requires "Test::Moose::More" => "0.014";
   requires "Test::More" => "0.94";
   requires "lib" => "0";
+  requires "perl" => "5.006";
   requires "strict" => "0";
   requires "warnings" => "0";
 };
