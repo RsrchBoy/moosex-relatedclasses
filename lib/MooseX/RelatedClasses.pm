@@ -311,6 +311,7 @@ __END__
         traits     => [ Shortcuts ],                # MooseX::AttributeShortcuts
         is         => 'lazy',                       # MX::AttributeShortcuts
         isa        => LoadableClass,                # MooseX::Types::LoadableClass
+        init_arg   => undef,
         constraint => sub { $_->isa('Thinger') },   # MX::AttributeShortcuts
         builder    => sub { ... compose original class and traits ... },
     );
@@ -328,7 +329,7 @@ __END__
         isa        => LoadableClass,
         constraint => sub { $_->isa('Thinger') },
         coerce     => 1,
-        init_arg   => undef,
+        init_arg   => 'thinger_class',
         builder    => sub { 'My::Framework::Thinger' },
     );
 
