@@ -32,13 +32,13 @@ use MooseX::Types::Moose ':all';
     use namespace::autoclean;
     use MooseX::RelatedClasses;
 
-    related_class { 'Baz' => 'baz' },       namespace => 'TestClass';
+    related_class { 'Baz'    => 'baz' },    namespace => 'TestClass';
     related_class { 'Kraken' => 'kraken' }, namespace => 'TestClass', private => 1;
 }
-{ package TestClass::Baz;    use Moose; use namespace::autoclean }
-{ package TestClass::Kraken; use Moose; use namespace::autoclean }
 
-{ package TestClass::Bar; use Moose; use namespace::autoclean; extends 'TestClass::Baz' }
+{ package TestClass::Baz;    use Moose; use namespace::autoclean                           }
+{ package TestClass::Kraken; use Moose; use namespace::autoclean                           }
+{ package TestClass::Bar;    use Moose; use namespace::autoclean; extends 'TestClass::Baz' }
 
 for my $test_class (qw(TestClass ShortTestClass CustomNameTestClass)) {
     with_immutable {
@@ -52,12 +52,12 @@ for my $test_class (qw(TestClass ShortTestClass CustomNameTestClass)) {
                     init_arg => undef,
                 },
                 baz_class_traits => {
-                    traits => ['Array'],
-                    reader    => 'baz_class_traits',
+                    traits  => ['Array'],
+                    reader  => 'baz_class_traits',
                     handles => { has_baz_class_traits => 'count' },
-                    builder   => '_build_baz_class_traits',
-                    isa       => ArrayRef[class_type('TestClass::Baz')],
-                    lazy      => 1,
+                    builder => '_build_baz_class_traits',
+                    isa     => ArrayRef[class_type('TestClass::Baz')],
+                    lazy    => 1,
                 },
                 original_baz_class => {
                     reader   => 'original_baz_class',
@@ -74,12 +74,12 @@ for my $test_class (qw(TestClass ShortTestClass CustomNameTestClass)) {
                     init_arg => undef,
                 },
                 _kraken_class_traits => {
-                    traits => ['Array'],
-                    reader    => '_kraken_class_traits',
+                    traits  => ['Array'],
+                    reader  => '_kraken_class_traits',
                     handles => { _has_kraken_class_traits => 'count' },
-                    builder   => '_build__kraken_class_traits',
-                    isa       => ArrayRef[class_type('TestClass::Kraken')],
-                    lazy      => 1,
+                    builder => '_build__kraken_class_traits',
+                    isa     => ArrayRef[class_type('TestClass::Kraken')],
+                    lazy    => 1,
                 },
                 _original_kraken_class => {
                     reader   => '_original_kraken_class',
