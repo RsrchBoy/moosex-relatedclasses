@@ -392,12 +392,15 @@ related classes:
 
 And that will generate the expected related class attributes:
 
+    # TimeLords::Gallifrey
     gallifrey_class
     gallifrey_class_traits
     original_gallifrey_class
+    # TimeLords::Enemies::Daleks
     enemies__daleks_class
     enemies__daleks_class_traits
     original_enemies__daleks_class
+    # TimeLords::SoftwareWritten::Git
     software_written__git_class
     software_written__git_class_traits
     original_software_written__git_class
