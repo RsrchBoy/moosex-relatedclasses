@@ -8,7 +8,7 @@ use Test::Moose::More 0.014;
 use Moose::Util::TypeConstraints 'class_type';
 
 # debugging...
-use Smart::Comments '###';
+#use Smart::Comments '###';
 
 {
     package TestClass;

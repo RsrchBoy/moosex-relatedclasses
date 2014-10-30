@@ -21,7 +21,6 @@ on 'test' => sub {
   requires "IPC::Open3" => "0";
   requires "Moose" => "0";
   requires "Moose::Util::TypeConstraints" => "0";
-  requires "Smart::Comments" => "0";
   requires "Test::CheckDeps" => "0.010";
   requires "Test::Fatal" => "0";
   requires "Test::Moose::More" => "0.014";
