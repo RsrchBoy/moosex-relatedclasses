@@ -2,6 +2,9 @@ Revision history for MooseX-RelatedClasses
 
 {{$NEXT}}
 
+0.010     2015-04-10 17:07:11 PDT-0700
+	* no code changes, just squish an errant Smart::Comments in a test
+
 0.009     2014-05-14 00:51:43 PDT-0700
 	* add related_namespace() sugar
 	* fix some inaccurate code in SYNOPSIS
