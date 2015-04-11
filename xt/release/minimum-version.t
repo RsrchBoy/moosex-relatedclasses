@@ -1,3 +1,4 @@
+#!perl
 #
 # This file is part of MooseX-RelatedClasses
 #
@@ -7,6 +8,10 @@
 #
 #   The GNU Lesser General Public License, Version 2.1, February 1999
 #
-package Test::Class::__WONKY__::One;
 
-!!42;
+use Test::More;
+
+eval "use Test::MinimumVersion";
+plan skip_all => "Test::MinimumVersion required for testing minimum versions"
+  if $@;
+all_minimum_version_ok( qq{5.008008} );
