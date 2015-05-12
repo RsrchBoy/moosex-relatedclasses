@@ -37,6 +37,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Dist::Zilla::PluginBundle::RSRCHBOY" => "0.062";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Test::EOL" => "0";
   requires "Test::More" => "0.88";

@@ -1,10 +1,14 @@
+[![Build Status](https://travis-ci.org/RsrchBoy/moosex-relatedclasses.svg?branch=master)](https://travis-ci.org/RsrchBoy/moosex-relatedclasses)
+[![Kwalitee status](http://cpants.cpanauthors.org/dist/MooseX-RelatedClasses.png)](http://cpants.charsbar.org/dist/overview/MooseX-RelatedClasses)
+[![Coverage Status](https://coveralls.io/repos/RsrchBoy/moosex-relatedclasses/badge.png?branch=master)](https://coveralls.io/r/RsrchBoy/moosex-relatedclasses?branch=master)
+
 # NAME
 
 MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.010 of MooseX::RelatedClasses - released April 10, 2015 as part of MooseX-RelatedClasses.
+This document describes version 0.011 of MooseX::RelatedClasses - released May 12, 2015 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 
@@ -263,11 +267,6 @@ And more like:
 Anonymous classes are only ever composed if traits for a related class are
 supplied.
 
-# SOURCE
-
-The development version is on github at [http://https://github.com/RsrchBoy/moosex-relatedclasses](http://https://github.com/RsrchBoy/moosex-relatedclasses)
-and may be cloned from [git://https://github.com/RsrchBoy/moosex-relatedclasses.git](git://https://github.com/RsrchBoy/moosex-relatedclasses.git)
-
 # BUGS
 
 Please report any bugs or feature requests on the bugtracker website
@@ -284,7 +283,7 @@ Chris Weyl <cweyl@alumni.drew.edu>
 ## I'm a material boy in a material world
 
 <div>
-    <a href="https://www.gittip.com/RsrchBoy/"><img src="https://raw.githubusercontent.com/gittip/www.gittip.com/master/www/assets/%25version/logo.png" /></a>
+    <a href="https://gratipay.com/RsrchBoy/"><img src="http://img.shields.io/gratipay/RsrchBoy.svg" /></a>
     <a href="http://bit.ly/rsrchboys-wishlist"><img src="http://wps.io/wp-content/uploads/2014/05/amazon_wishlist.resized.png" /></a>
     <a href="https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatedclasses&title=RsrchBoy's%20CPAN%20MooseX-RelatedClasses&tags=%22RsrchBoy's%20MooseX-RelatedClasses%20in%20the%20CPAN%22"><img src="http://api.flattr.com/button/flattr-badge-large.png" /></a>
 </div>
@@ -294,9 +293,9 @@ rather **it is simply a very pleasant surprise**. I largely create and release
 works like this because I need them or I find it enjoyable; however, don't let
 that stop you if you feel like it ;)
 
-[Flattr this](https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatedclasses&title=RsrchBoy&#x27;s%20CPAN%20MooseX-RelatedClasses&tags=%22RsrchBoy&#x27;s%20MooseX-RelatedClasses%20in%20the%20CPAN%22),
-[gittip me](https://www.gittip.com/RsrchBoy/), or indulge my
-[Amazon Wishlist](http://bit.ly/rsrchboys-wishlist)...  If you so desire.
+[Flattr](https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatedclasses&title=RsrchBoy&#x27;s%20CPAN%20MooseX-RelatedClasses&tags=%22RsrchBoy&#x27;s%20MooseX-RelatedClasses%20in%20the%20CPAN%22),
+[Gratipay](https://gratipay.com/RsrchBoy/), or indulge my
+[Amazon Wishlist](http://bit.ly/rsrchboys-wishlist)...  If and \*only\* if you so desire.
 
 # CONTRIBUTOR
 
