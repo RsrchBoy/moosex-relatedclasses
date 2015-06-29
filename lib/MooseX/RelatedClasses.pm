@@ -348,18 +348,6 @@ way to make that difficult-to-impossible without a significant effort?
 This package aims to end that, by providing an easy, flexible way of defining
 "related classes", their base class, and allowing traits to be specified.
 
-=head2 This is early code!
-
-This package is very new, and is still being vetted "in use", as it were.  The
-documentation (or tests) may not be 100%, but it's in active use.  Pull
-requests are happily received :)
-
-=head2 Documentation
-
-See the SYNOPSIS for information; the tests are also useful here as well.
-
-I _did_ warn you this is a very early release, right?
-
 =head1 EXAMPLES
 
 =head2 Multiple Related Classes at Once
