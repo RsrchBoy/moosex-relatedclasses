@@ -8,7 +8,7 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.011 of MooseX::RelatedClasses - released May 12, 2015 as part of MooseX-RelatedClasses.
+This document describes version 0.011 of MooseX::RelatedClasses - released June 29, 2015 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 
@@ -72,18 +72,6 @@ way to make that difficult-to-impossible without a significant effort?
 
 This package aims to end that, by providing an easy, flexible way of defining
 "related classes", their base class, and allowing traits to be specified.
-
-## This is early code!
-
-This package is very new, and is still being vetted "in use", as it were.  The
-documentation (or tests) may not be 100%, but it's in active use.  Pull
-requests are happily received :)
-
-## Documentation
-
-See the SYNOPSIS for information; the tests are also useful here as well.
-
-I \_did\_ warn you this is a very early release, right?
 
 # ROLE PARAMETERS
 
