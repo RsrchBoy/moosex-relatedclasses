@@ -21,7 +21,8 @@ use String::RewritePrefix;
 use Moose::Exporter;
 Moose::Exporter->setup_import_methods(
     with_meta => [ qw{
-        related_classes   related_class
+        related_class
+        related_classes
         related_namespace
     } ],
 );
