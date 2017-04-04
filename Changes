@@ -1,7 +1,5 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
-
 0.011     2017-04-03 20:39:14 CDT-0500
 	* Prevent our exported sugar from becoming role methods
 
