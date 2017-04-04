@@ -236,71 +236,65 @@ role {
         $p->_set_names(\%mod);
     }
 
-    $p->names->each(sub { _generate_one_attribute_set($p, @_, %opts) });
-    #_generate_one_attribute_set($p, $_, %opts)
-        #for $p->names->flatten;
+    for my $name ($p->names->keys->flatten) {
+        my $identifier = $p->names->{$name};
+
+        my $full_name
+            = $p->namespace
+            ? $p->namespace . '::' . $name
+            : $name
+            ;
+
+        my $pvt = $p->private ? '_' : q{};
+
+        # SomeThing::More -> some_thing__more
+        my $local_name           = "${identifier}_class";
+        my $original_local_name  = "original_$local_name";
+        my $original_reader      = "$pvt$original_local_name";
+        my $traitsfor_local_name = $local_name . '_traits';
+        my $traitsfor_reader     = "$pvt$traitsfor_local_name";
+
+        ### $full_name
+        has "$pvt$original_local_name" => (
+            traits     => [Shortcuts],
+            is         => 'lazy',
+            isa        => LoadableClass,
+            constraint => sub { $_->isa($full_name) },
+            coerce     => 1,
+            init_arg   => "$pvt$local_name",
+            builder    => sub { $full_name },
+        );
+
+        has "$pvt$local_name" => (
+            traits     => [Shortcuts],
+            is         => 'lazy',
+            isa        => LoadableClass,
+            constraint => sub { $_->isa($full_name) },
+            coerce     => 1,
+            init_arg   => undef,
+            builder    => sub {
+                my $self = shift @_;
+
+                return with_traits( $self->$original_reader() =>
+                    $self->$traitsfor_reader()->flatten,
+                );
+            },
+        );
+
+        # XXX do the same original/local init_arg swizzle here too?
+        has "$pvt$traitsfor_local_name" => (
+            traits  => [Shortcuts, 'Array'],
+            is      => 'lazy',
+            isa     => ArrayRef[LoadableRole],
+            builder => sub { [ ] },
+            handles => {
+                "${pvt}has_$traitsfor_local_name" => 'count',
+            },
+        );
+    }
 
     return;
 };
-
-sub _generate_one_attribute_set {
-    my ($p, $name => $identifier, %opts) = @_;
-
-    my $full_name
-        = $p->namespace
-        ? $p->namespace . '::' . $name
-        : $name
-        ;
-
-    my $pvt = $p->private ? '_' : q{};
-
-    # SomeThing::More -> some_thing__more
-    my $local_name           = "${identifier}_class";
-    my $original_local_name  = "original_$local_name";
-    my $original_reader      = "$pvt$original_local_name";
-    my $traitsfor_local_name = $local_name . '_traits';
-    my $traitsfor_reader     = "$pvt$traitsfor_local_name";
-
-    ### $full_name
-    has "$pvt$original_local_name" => (
-        traits     => [Shortcuts],
-        is         => 'lazy',
-        isa        => LoadableClass,
-        constraint => sub { $_->isa($full_name) },
-        coerce     => 1,
-        init_arg   => "$pvt$local_name",
-        builder    => sub { $full_name },
-    );
-
-    has "$pvt$local_name" => (
-        traits     => [Shortcuts],
-        is         => 'lazy',
-        isa        => LoadableClass,
-        constraint => sub { $_->isa($full_name) },
-        coerce     => 1,
-        init_arg   => undef,
-        builder    => sub {
-            my $self = shift @_;
-
-            return with_traits( $self->$original_reader() =>
-                $self->$traitsfor_reader()->flatten,
-            );
-        },
-    );
-
-    # XXX do the same original/local init_arg swizzle here too?
-    has "$pvt$traitsfor_local_name" => (
-        traits  => [Shortcuts, 'Array'],
-        is      => 'lazy',
-        isa     => ArrayRef[LoadableRole],
-        builder => sub { [ ] },
-        handles => {
-            "${pvt}has_$traitsfor_local_name" => 'count',
-        },
-    );
-
-    return;
-}
 
 !!42;
 __END__
