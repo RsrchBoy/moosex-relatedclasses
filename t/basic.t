@@ -1,5 +1,5 @@
 use Test::More;
-use Test::Moose::More 0.014;
+use Test::Moose::More 0.045;
 use Test::Fatal;
 use Moose::Util::TypeConstraints 'class_type';
 
@@ -73,6 +73,8 @@ with_immutable {
             },
         ],
         methods => [ qw{ _build_baz_class _build__kraken_class} ],
+
+        no_methods => [ qw{ _generate_one_attribute_set related_class related_classes related_namespace } ],
     );
 
     my $tc = TestClass->new;

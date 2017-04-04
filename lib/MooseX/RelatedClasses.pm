@@ -19,13 +19,6 @@ use Class::Load 'load_class';
 use String::RewritePrefix;
 
 use Moose::Exporter;
-Moose::Exporter->setup_import_methods(
-    with_meta => [ qw{
-        related_class
-        related_classes
-        related_namespace
-    } ],
-);
 
 =func related_class()
 
@@ -44,20 +37,6 @@ Takes the same options that the role takes as parameters.  That means that this:
         namespace => undef,
     };
 
-=cut
-
-sub related_class { goto \&related_classes }
-
-sub related_classes {
-    my $meta = shift;
-
-    if (@_ % 2 == 1) {
-        unshift @_, ref $_[0] ? 'names' : 'name';
-    }
-
-    find_meta('MooseX::RelatedClasses')->apply($meta, @_);
-}
-
 =func related_namespace()
 
 Given a namespace, declares that everything under that namespace is related.
@@ -75,19 +54,62 @@ That is,
 
 =cut
 
-sub related_namespace {
-    my ($meta, $namespace) = (shift, shift);
+{
+    package MooseX::RelatedClasses::Exports;
 
-    my %args = (
-        all_in_namespace => 1,
-        namespace        => $namespace,
-        name             => $namespace,
-        @_,
+    # This is a little awkward, but it resolves the unpleasantness of having
+    # these functions become part of the role (!!!)
+    #
+    # Here we simply create a "dummy" package using Moose exporter, then pull
+    # its imports in via an "also" in the main package.  This resolves things
+    # nicely without having to do any meta-tinkering.
+    #
+    # Sadly.
+
+    use strict;
+    use warnings;
+
+    use MooseX::Util 'find_meta';
+    use Moose::Exporter;
+
+    Moose::Exporter->setup_import_methods(
+        with_meta => [ qw{
+            related_class
+            related_classes
+            related_namespace
+        } ],
     );
 
-    ### %args
-    find_meta('MooseX::RelatedClasses')->apply($meta, %args);
+    sub related_class { goto \&related_classes }
+
+    sub related_classes {
+        my $meta = shift;
+
+        if (@_ % 2 == 1) {
+            unshift @_, ref $_[0] ? 'names' : 'name';
+        }
+
+        find_meta('MooseX::RelatedClasses')->apply($meta, @_);
+    }
+
+    sub related_namespace {
+        my ($meta, $namespace) = (shift, shift);
+
+        my %args = (
+            all_in_namespace => 1,
+            namespace        => $namespace,
+            name             => $namespace,
+            @_,
+        );
+
+        ### %args
+        find_meta('MooseX::RelatedClasses')->apply($meta, %args);
+    }
 }
+
+Moose::Exporter->setup_import_methods(
+    also => 'MooseX::RelatedClasses::Exports',
+);
 
 =roleparam name
 
@@ -296,7 +318,7 @@ __END__
     use MooseX::RelatedClasses;
     related_class name => 'Thinger', namespace => undef;
 
-    # ...or this (preferred):
+    # ...or this:
     use MooseX::RelatedClasses;
     related_class 'Thinger', namespace => undef;
 
