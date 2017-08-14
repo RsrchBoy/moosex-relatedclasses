@@ -8,7 +8,7 @@ MooseX::RelatedClasses - Parameterized role for related class attributes
 
 # VERSION
 
-This document describes version 0.011 of MooseX::RelatedClasses - released April 03, 2017 as part of MooseX-RelatedClasses.
+This document describes version 0.012 of MooseX::RelatedClasses - released August 13, 2017 as part of MooseX-RelatedClasses.
 
 # SYNOPSIS
 
@@ -274,7 +274,7 @@ Kulag <g.kulag@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 by Chris Weyl.
+This software is Copyright (c) 2017, 2015, 2014, 2013, 2012 by Chris Weyl.
 
 This is free software, licensed under:
 
