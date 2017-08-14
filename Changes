@@ -1,7 +1,5 @@
 Revision history for MooseX-RelatedClasses
 
-{{$NEXT}}
-
 0.012     2017-08-13 20:01:22 CDT-0500
 	* Fix tests for Perl v5.26.
 
