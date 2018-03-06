@@ -1,6 +1,6 @@
 package MooseX::RelatedClasses;
 
-# ABSTRACT: Parameterized role for related class attributes
+# ABSTRACT: Parameterized role for related class construction
 
 use MooseX::Role::Parameterized;
 use namespace::autoclean;
